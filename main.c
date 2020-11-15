@@ -9,7 +9,7 @@
 #include "raspberry-pi-bme280/bme280.h"
 
 #define COUNTER 10;
-#define SLEEP_PERIOD 5
+#define SLEEP_PERIOD 1800
 
 static volatile sig_atomic_t run = 1;
 
@@ -134,7 +134,6 @@ int main(int argc, char *argv[])
 
         while (run && true)
         {
-                print_date_time();
                 
                 sleep(SLEEP_PERIOD);
 
