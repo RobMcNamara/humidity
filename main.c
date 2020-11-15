@@ -16,28 +16,10 @@ static volatile sig_atomic_t run = 1;
 void print_date_time()
 {
         time_t tvar;
-        /* Returns the current time of the system as a time_t object
-     * which is usually time since an epoch, typically the Unix epoch
-     */
+
         time(&tvar);
-        /* Print the date and time after converting a time_t object
-     * to a textual representation using ctime()
-     */
+     
         printf("Today's date and time : %s", ctime(&tvar));
-}
-
-struct read_value
-{
-        int humidity;
-        int temp;
-};
-
-struct read_value get_humidity_and_temp()
-{
-        struct read_value reads;
-        reads.humidity = 1;
-        reads.temp = 1;
-        return reads;
 }
 
 /**
