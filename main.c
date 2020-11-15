@@ -135,8 +135,7 @@ int main(int argc, char *argv[])
         while (run && true)
         {
                 print_date_time();
-                //     s = get_humidity_and_temp();
-                //     printf("Temp: %d\nHumidity: %d\n", s.temp, s.humidity);
+                
                 sleep(SLEEP_PERIOD);
 
                 getRawData(fd, &raw);
@@ -150,6 +149,8 @@ int main(int argc, char *argv[])
                 snprintf(buf, sizeof(buf), "{\"sensor\":\"bme280\", \"humidity\":%.2f, \"pressure\":%.2f,"
                                                    " \"temperature\":%.2f, \"altitude\":%.2f, \"timestamp\":%d}\n",
                          h, p, t, a, (int)time(NULL));
+
+                printf("%s\n", buf);
 
                 size_t len = strlen(buf);
                 rd_kafka_resp_err_t err;
