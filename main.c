@@ -18,7 +18,7 @@ void print_date_time()
         time_t tvar;
 
         time(&tvar);
-     
+
         printf("Today's date and time : %s", ctime(&tvar));
 }
 
@@ -66,9 +66,6 @@ int main(int argc, char *argv[])
         char errstring[512];
         char buf[512];
 
-        const char *brokers; /* Argument: broker list */
-        const char *topic;
-
         int fd = wiringPiI2CSetup(BME280_ADDRESS);
         if (fd < 0)
         {
@@ -84,9 +81,12 @@ int main(int argc, char *argv[])
 
         bme280_raw_data raw;
 
+        const char *brokers; /* Argument: broker list */
+        const char *topic;
+
         if (argc != 3)
         {
-                fprintf(stderr, "%% Usage: %s <broker> <topic>\n", argv[0]);
+                fprintf(stderr, "%% Usage: %s <broker:port> <topic>\n", argv[0]);
                 return 1;
         }
 
@@ -96,6 +96,12 @@ int main(int argc, char *argv[])
         configuration = rd_kafka_conf_new();
 
         if (rd_kafka_conf_set(configuration, "bootstrap.servers", brokers, errstring, sizeof(errstring)) != RD_KAFKA_CONF_OK)
+        {
+                fprintf(stderr, "Problem setting config: %s\n", errstring);
+                return 1;
+        }
+
+        if (rd_kafka_conf_set(configuration, "security.protocol", "sasl_plaintext", errstring, sizeof(errstring)) != RD_KAFKA_CONF_OK)
         {
                 fprintf(stderr, "Problem setting config: %s\n", errstring);
                 return 1;
@@ -116,7 +122,7 @@ int main(int argc, char *argv[])
 
         while (run && true)
         {
-                
+
                 sleep(SLEEP_PERIOD);
 
                 getRawData(fd, &raw);
@@ -128,7 +134,7 @@ int main(int argc, char *argv[])
                 float a = getAltitude(p);                                       // meters
 
                 snprintf(buf, sizeof(buf), "{\"sensor\":\"bme280\", \"humidity\":%.2f, \"pressure\":%.2f,"
-                                                   " \"temperature\":%.2f, \"altitude\":%.2f, \"timestamp\":%d}\n",
+                                           " \"temperature\":%.2f, \"altitude\":%.2f, \"timestamp\":%d}\n",
                          h, p, t, a, (int)time(NULL));
 
                 printf("%s\n", buf);
