@@ -58,7 +58,6 @@ static void stop(int sig)
 int main(int argc, char *argv[])
 {
         printf("Starting up node: %s\n", argv[1]);
-        struct read_value s;
 
         rd_kafka_t *producer;
         rd_kafka_conf_t *configuration;
