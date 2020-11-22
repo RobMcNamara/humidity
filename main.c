@@ -100,12 +100,6 @@ int main(int argc, char *argv[])
                 return 1;
         }
 
-        if (rd_kafka_conf_set(configuration, "security.protocol", "sasl_plaintext", errstring, sizeof(errstring)) != RD_KAFKA_CONF_OK)
-        {
-                fprintf(stderr, "Problem setting config: %s\n", errstring);
-                return 1;
-        }
-
         rd_kafka_conf_set_dr_msg_cb(configuration, dr_msg_cb);
 
         producer = rd_kafka_new(RD_KAFKA_PRODUCER, configuration, errstring, sizeof(errstring));
